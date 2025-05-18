@@ -8,28 +8,35 @@ export default async function handleContentReaction(reaction, user) {
         if (user.bot) return;
         const content = reaction.message.content;
         const userMention = `<@${user.id}>`;
-        const tankRegex = /Tank:(?!\s*<@\d+>)/;
-        const dpsRegex = /DPS:(?!\s*<@\d+>)/;
-        const healRegex = /Heal:(?!\s*<@\d+>)/;
+        let newContent = content;
         switch (reaction.emoji.name) {
             case '🟦':
-                if (tankRegex.test(content)) {
-                    const newContent = content.replace(tankRegex, `Tank: ${userMention}`);
-                    await reaction.message.edit({ content: newContent });
+                if (/Tank:(?!\s*<@\d+>)/.test(content)) {
+                    newContent = content.replace(/Tank:(?!\s*<@\d+>)/, `Tank: ${userMention}`);
+                }
+                else {
+                    await reaction.message.reply({ content: `No empty slots for Tank! Try other role ${userMention}` });
                 }
                 break;
             case '🟥':
-                if (tankRegex.test(content)) {
-                    const newContent = content.replace(dpsRegex, `DPS: ${userMention}`);
-                    await reaction.message.edit({ content: newContent });
+                if (/DPS:(?!\s*<@\d+>)/.test(content)) {
+                    newContent = content.replace(/DPS:(?!\s*<@\d+>)/, `DPS: ${userMention}`);
+                }
+                else {
+                    await reaction.message.reply({ content: `No empty slots for DPS! Try other role ${userMention}` });
                 }
                 break;
             case '🟩':
-                if (tankRegex.test(content)) {
-                    const newContent = content.replace(healRegex, `Heal: ${userMention}`);
-                    await reaction.message.edit({ content: newContent });
+                if (/Heal:(?!\s*<@\d+>)/.test(content)) {
+                    newContent = content.replace(/Heal:(?!\s*<@\d+>)/, `Heal: ${userMention}`);
+                }
+                else {
+                    await reaction.message.reply({ content: `No empty slots for Heal! Try other role ${userMention}` });
                 }
                 break;
+        }
+        if (newContent !== content) {
+            await reaction.message.edit({ content: newContent });
         }
     }
     catch (e) {
