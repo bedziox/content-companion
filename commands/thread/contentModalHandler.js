@@ -42,9 +42,9 @@ export default async function handleContentSubmit(interaction) {
         // Fetch the starter message of the thread
         const starterMessage = thread.messages ? await thread.messages.fetch(thread.id) : null;
         if (starterMessage) {
-            await starterMessage.react('🟦'); // blue square
-            await starterMessage.react('🟥'); // red square
-            await starterMessage.react('🟩'); // green square
+            await starterMessage.react('🟦');
+            await starterMessage.react('🟥');
+            await starterMessage.react('🟩'); 
         }
 
         await interaction.reply({ content: 'Thread created!'});
